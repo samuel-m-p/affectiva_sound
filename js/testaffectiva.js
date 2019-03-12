@@ -19,7 +19,7 @@
   var audio_anger = new Audio('http://www.moviewavs.com/0053148414/WAVS/Movies/Star_Wars/imperial.wav');
   var audio_surprise = new Audio('http://www.moviewavs.com/0053148414/WAVS/TV_Shows/X-Files/xfiles.wav');
 	
-  function checkEmotions(faces){
+  function checkEmotions1(faces){
 	  		
 		if(faces[0].emotions.joy > 50 && isPlaying(audio_joy) == false && isPlaying(audio_sad) == false && 
 				isPlaying(audio_anger) == false && isPlaying(audio_surprise) == false) {
@@ -85,7 +85,7 @@
 var time_click = 1; //Indica el tiempo (en seg) necesario para poder activar el siguiente click
 var can_click = true;
 
-function checkEmotions_1(faces){
+function checkEmotions(faces){
 	if(faces[0].expressions.browRaise > 50){ //Si se levantan las cejas a mas del 50%
 			var el = document.getElementById("regular_button");
 			if(can_click){ //Si ha pasado un segundo despues del anterior click
