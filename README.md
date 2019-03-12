@@ -1,6 +1,6 @@
 # affectiva_sound
 
-Ejemplos de reproduccion de sonido y click en función de la expresión facial detectada
+Ejemplos de reproduccion de sonido y click en función de la expresión facial detectada para la asignatura IPO 2019
 
 **Se puede probar en: https://samuel-m-p.github.io/affectiva_sound/index.html**
 
