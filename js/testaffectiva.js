@@ -95,7 +95,7 @@ function checkEmotions(faces){
 			}
 	}
 }
-
+ 
  /**
 	* Callback cuando se hace click en el botton regular_button. Cambia el contenido
 	* del elemento html para llevar la cuenta del numero de clicks
