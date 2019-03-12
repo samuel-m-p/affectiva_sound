@@ -1,6 +1,6 @@
 # affectiva_sound
 
-Ejemplo de reproduccion de sonido y click en función de la expresión facial detectada
+Ejemplos de reproduccion de sonido y click en función de la expresión facial detectada
 
 **Se puede probar en: https://samuel-m-p.github.io/affectiva_sound/index.html**
 
@@ -33,81 +33,98 @@ Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-b
 
 ## 2. Explicación del código
 
-Para incluir nuevos elementos y que queden por encima de la imagen de la cámara basta con añadirlos en *index.html* dentro del div que contiene el canvas de video:
+El codigo contiene dos ejemplos:
 
+- Reproducción de audio en funcion de la expresion emocional detectada
+- Click en un botón al detectar levantamiento de cejas
+
+### 2.1 Reproducción de audio en funcion de la expresion emocional
+
+Si no se toca nada, es el ejemplo activo.
+
+Está al comienzo del archivo (*/js/testaffectiva.js*).
+
+Lo primero que se hace es guardar los archivos de audio en variables:
 ```
-<div class="canvas-container" id="container"> 
-   <a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
-    ... elemento
-    ... elemento
-<div>
-```
-
-A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se muestra el video). 4 de ellos son de tipo *a href* convertidos en botones y el otro es un botón normal inicialmente oculto. 
-
-## 3. Cómo hacer elementos clickables
-
-- En *index.html* los elementos incluidos deben ser de clase *class="clickable"*
-
-Ejemplo incluido en *index.html*:
-
-```
-<a href="https://studium.usal.es/" id="button2" class="button clickable">Button 2</a>
+var audio_joy = new Audio('http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav');
+...
+...
 ```
 
-Es de clase *button* y *clickable*. La clase *button* es para darle estilo con CSS. 
+Luego, la función *checkEmotions(faces)* se llama en cada ciclo de procesamiento. Lo que hace es comprobar si una expresion pasa del 50% del valor y hace sonar un archivo de audio en funcion de la emocion detectada (si no hay otro sonido siendo reproducido).
 
-Al hacer click en el 'Button 2' nos envía a la página de studium.
+En esta función podéis ver cómo acceder a los valores devueltos por affectiva.
 
-### 3.1. Cómo incluir funcionalidad adicional al hacer click
+#### Ejemplo para alegría:
 
-- En *index.html* añadir el nombre de la función javascript que hará los cambios en la página cuando salte el evento de click. Se pone en el atributo "onclick" del elemento.
-
-Como ejemplo, el primer 'boton' incluido en el html es de clase *clickable* y llamará a la función *button1_click()* cuando se pinche en él:
-
+- Si el valor de alegria es mayor de 50 y no se esta reproduciendo otro audio, se reproduce el audio asociado a alegria
 ```
-<a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
+function checkEmotions(faces){
+	if(faces[0].emotions.joy > 50 && isPlaying(audio_joy) == false && isPlaying(audio_sad) == false && 
+	isPlaying(audio_anger) == false && isPlaying(audio_surprise) == false) {
+		audio_joy.play();
+	}
+```
+- Si el valor de alegria es menor de 50 o se esta reproduciendo otro audio, se reproduce el audio asociado a alegria
+```
+else if (faces[0].emotions.joy < 50 && isPlaying(audio_joy) == true) {
+		audio_joy.pause();
+		audio_joy.currentTime = 0;
+	}
 ```
 
-- En el fichero javascript incluido en (*/js/hand_detect.js*):
+Y esta misma estructura se sigue para el resto de emociones.
+
+### 2.2 Click en un botón al detectar levantamiento de cejas
+
+Este ejemplo no esta activo. Para activarlo:
+- editar el archivo (*/js/testaffectiva.js*) 
+- renombrar la funcion anterior (checkEmotions) con otro nombre
+- renombrar la funcion *checkEmotions_1* a *checkEmotions*
+
+
+La funcion *checkEmotions_1* en cada ciclo de procesamiento comprueba si el valor de levantamiento cejas es mayor de 50. En caso de serlo, se hace click en el boton y se lanza un temporizador que impide hacer un nuevo click durante un segundo (para evitar muchos clicks consecutivos).
+
+ /**
+ * Hace click en el boton al levantar las cejas mas de 50%
+ * Activa un temporizador de un seg para impedir clicks consecutivos
+ */
  
-Aquí definís lo que queréis que ocurra al hacer click. A modo de ejemplo, la primera función del archivo (se llama igual *button1_click*) hace que desaparezca el elemento con *id=button1* al hacer click en él y aparezca el botón *regular_button*:
-
 ```
-function button1_click(){
-	var el = document.getElementById("button1").style.display = "none";
-	var el1 = document.getElementById("regular_button").style.display = "block";
+var time_click = 1; //Indica el tiempo (en seg) necesario para poder activar el siguiente click
+var can_click = true;
+function checkEmotions_1(faces){
+	if(faces[0].expressions.browRaise > 50){ //Si se levantan las cejas a mas del 50%
+		var el = document.getElementById("regular_button");
+		if(can_click){ //Si ha pasado un segundo despues del anterior click
+			el.click(); //lanzamos el click
+			window.setTimeout(function checkClick(){can_click = true;}, 1000 * time_click); //lanzamos temporizador para habilitar el siguiente click
+			can_click = false; //indicamos que no se puede hacer click
+		}
+	}
 }
 ```
 
-#### Otro ejemplo:
-
-La segunda función que aparece en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento: 
-
-```
-<button type="button" id="regular_button" class="clickable" onclick='regular_button_click();'>I'M A REGULAR BUTTON</button>
-```
-
-La funcion en javascript (/js/hand_detect.js):
+La funcion *regular_button_click* es la funcion que se llama al hacer click en el elemento *regular_button* del *index.html*. 
+Para que salte el evento, se añade el nombre de la función javascript que se llamará al hacer click. Se pone en el atributo "onclick" del elemento html:
 
 ```
+<button type="button" id="regular_button" class="clickable" onclick='regular_button_click();'>Nº VECES CLICK: </button>
+```
+
+Luego, esa funcion en javascript lo único que hace es modificar el contenido del elemento html llevando la cuenta del numero de clicks que se han activado sobre dicho elemento:
+
+```
+ /**
+ * Callback cuando se hace click en el botton regular_button. Cambia el contenido
+ * del elemento html para llevar la cuenta del numero de clicks
+ */
+var contador_clicks = 0;
 function regular_button_click(){
-	var el = document.getElementById("button1").style.display = "block";
-	var el1 = document.getElementById("regular_button").style.display = "none";
+	contador_clicks++;
+	document.getElementById("regular_button").innerHTML = "Nº VECES CLICK: " + contador_clicks.toString();
 }
 ```
-
-### 3.2. Cómo modificar el tiempo que se tarda en hacer click
-
-Al comienzo del archivo javascript (/js/hand_detect.js) tenéis dos variables que podéis cambiar para modificar el tiempo necesario para hacer click:
-
-var timeClick = 2; //indica el tiempo (en seg) necesario para activar un click
-
-var timeIddle = 1; //indica el tiempo (en seg) sin detectar mano para resetear la deteccion de click
-
-- *timeClick*: es el tiempo (en seg) que el puntero debe estar con mano detectada (verde) sobre un elemento para hacer click.
-
-- *timeIddle*: es el tiempo (en seg) sin detectar mano para resetear el contador anterior. Impide que al dejar el puntero encima de un elemento sin detectar mano se lance el click automáticamente.
 
 ## Enlaces
 
