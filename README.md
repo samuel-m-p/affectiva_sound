@@ -2,7 +2,7 @@
 
 Ejemplos de reproduccion de sonido y click en función de la expresión facial detectada para la asignatura IPO 2019
 
-**Se puede probar en: https://samuel-m-p.github.io/affectiva_sound/index.html**
+**Se puede probar en: https://samuel-m-p.github.io/affectiva_sound/index.html** (Puede tardar en cargar)
 
 ## 1. Cómo usarlo
 
@@ -17,7 +17,8 @@ The detector reports initialized
 - Para que funcione bien, se debe poner la cara de frente a la cámara (sin girar el cuello) y en posición vertical. Una vez que reconozca el rostro, aparecerán una serie de valores bajo EMOTION TRACKING RESULTS.
 - Probar a poner diferentes expresiones con la cara (alegría, enfado, sorpresa,etc.) y mantenerlas. Cuando el valor detectado para esa expresión en 'DETECTOR LOG MSGS' supere *50*, comenzará a sonar un archivo de audio.
 
-*Nota: el tracking en general funciona mejor con buenas condiciones de iluminación, la cara centrada, sin gafas y sin barba*
+*Nota 1: el tracking en general funciona mejor con buenas condiciones de iluminación, la cara centrada, sin gafas y sin barba*
+*Nota 2: puede tardar en cargar e iniciar el tracking en función de la conexión, potencia del pc, etc.*
 
 ### 1.1. Prerequisitos
 
@@ -128,7 +129,5 @@ function regular_button_click(){
 
 ## Enlaces
 
-* [Python](http://www.dropwizard.io/1.0.2/docs/) - Instalar Python con Anaconda (Windows)
-* [Simple-http](https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server) - Configurar un servidor de prueba local
-* [OpenCV.js](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html) - Tutoriales de OpenCV para javascript
-* [OpenCV](https://docs.opencv.org/3.4.0/d9/df8/tutorial_root.html) - Tutoriales de OpenCV 
+* [Affectiva](https://developer.affectiva.com/) - Requiere registro. Una vez registrado se tiene acceso a otras SDKs (C#, CPP, Android)
+* [Affectiva sample](https://jsfiddle.net/affectiva/opyh5e8d/show/) - Ejemplo original
