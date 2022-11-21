@@ -14,7 +14,7 @@
 																						cheekRaise, lipStretch)
  */
   	// Archivos de audio
-  var audio_joy = new Audio('http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav');
+  var audio_joy = new Audio('https://assets.mixkit.co/music/preview/mixkit-a-very-happy-christmas-897.mp3');
   var audio_sad = new Audio('http://www.moviewavs.com/0053148414/WAVS/Movies/Willy_Wonka_And_The_Chocolate_Factory/cheerupcharlie.wav');
   var audio_anger = new Audio('http://www.moviewavs.com/0053148414/WAVS/Movies/Star_Wars/imperial.wav');
   var audio_surprise = new Audio('http://www.moviewavs.com/0053148414/WAVS/TV_Shows/X-Files/xfiles.wav');
